@@ -45,9 +45,12 @@ shinyServer(function(input, output) {
       uscrime$subcrime = uscrime$subcrime + uscrime$Assault
     }
     if (input$rape) {
-      if (type == "") type = paste ("Rape")
-      else type = paste(type, "+Rape", sep="")
+      type = paste(type, ", Rape")
       uscrime$subcrime = uscrime$subcrime + uscrime$Rape
+    }
+    if (type == "") {
+      type = "Murder+Assault+Rape"
+      uscrime$subcrime = uscrime$Murder + uscrime$Assault + uscrime$Rape
     }
     uscrime[uscrime$subcrime >= quantile(uscrime$subcrime, c(as.numeric(myPerc())/100)),]$subcrime = uscrime[uscrime$subcrime >= quantile(uscrime$subcrime, c(as.numeric(myPerc())/100)),]$subcrime
     uscrimeTable = uscrime[uscrime$subcrime >= quantile(uscrime$subcrime, c(as.numeric(myPerc())/100)),]
@@ -84,7 +87,7 @@ shinyServer(function(input, output) {
           type = paste(type, "+Rape", sep = "")
         }
       }
-    
+      if (type == "") type = "Murder+Assault+Rape"
 #    names(uscrime)[2] = type
     paste(type)
   })
@@ -110,6 +113,10 @@ shinyServer(function(input, output) {
       if (input$rape) {
         type = paste(type, ", Rape")
         uscrime$subcrime = uscrime$subcrime + uscrime$Rape
+      }
+      if (type == "") {
+        type = "Murder+Assault+Rape"
+        uscrime$subcrime = uscrime$Murder + uscrime$Assault + uscrime$Rape
       }
 
     uscrime[uscrime$subcrime < quantile(uscrime$subcrime, c(as.numeric(myPerc())/100)),]$subcrime = rep(0, length(uscrime[uscrime$subcrime < quantile(uscrime$subcrime, c(as.numeric(myPerc())/100)),]$subcrime))
